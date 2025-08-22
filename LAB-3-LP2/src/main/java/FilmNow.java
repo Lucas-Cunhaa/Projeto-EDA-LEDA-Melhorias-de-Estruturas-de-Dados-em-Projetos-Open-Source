@@ -1,6 +1,4 @@
-package main.java;
-
-import main.java.Filme;
+package src.main.java;
 /**
  * Sistema que gerencia filmes e sua lista de filmes favoritos (Hot List).
  * Pode armazenar até 100 filmes e 10 filmes favoritos.

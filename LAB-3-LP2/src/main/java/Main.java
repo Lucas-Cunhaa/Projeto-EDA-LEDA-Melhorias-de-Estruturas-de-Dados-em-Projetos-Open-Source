@@ -1,8 +1,9 @@
+package src.main.java;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.io.BufferedReader;
-
-import main.java.FilmNow;
 
 public class Main {
     public static void main(String[] args) {
