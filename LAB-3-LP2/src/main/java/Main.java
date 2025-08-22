@@ -1,31 +1,27 @@
-package main.java;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+
+import main.java.FilmNow;
 
 public class Main {
     public static void main(String[] args) {
           try {
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	            String line = "";
-	            // Cabeçalho
+
 	            System.out.println("Method Time Sample");
 	            while ((line = reader.readLine()) != null) {
 	                String[] tokens = line.split(" ");
                     FilmNow fm = new FilmNow();
-	                // medindo tempo de execução 
+
 	                long start = System.nanoTime();
-	                
-	                // TODO incluir aqui chamada para o método sob análise
-	                
-	                System.out.println(fm);
+	                int pos = 98;
+	                System.out.println(fm.cadastraFilme(pos, tokens[0], Integer.parseInt(tokens[1]), tokens[2]));
 	                long end = System.nanoTime();
 	                long time = end - start;
-	                
-	                // saída padrão: método tempo tamanho_da_entrada
-	                System.out.println("Cadastra Filmes " + (time) + " " + tokens.length);
 
+	                System.out.println("Cadastra-Filmes " + (time) + " " + tokens.length);
 	            }
 	        } catch (IOException ioe) {}
     }
