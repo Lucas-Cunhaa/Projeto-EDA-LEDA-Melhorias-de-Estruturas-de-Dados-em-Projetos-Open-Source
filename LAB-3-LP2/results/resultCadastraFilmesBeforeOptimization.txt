@@ -1,0 +1,2 @@
+Method Time Sample
+[NOME	ANO	LOCAL_ASSISTIR]
