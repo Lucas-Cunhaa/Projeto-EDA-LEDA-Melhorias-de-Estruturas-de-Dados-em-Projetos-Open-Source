@@ -13,7 +13,7 @@ public class Main {
 	            System.out.println("Method Time Sample");
 	            while ((line = reader.readLine()) != null) {
 	                String[] tokens = line.split(" ");
-                    FilmNow fm = new FilmNow();
+                    FilmNowOtimizado fm = new FilmNowOtimizado();
 
 	                long start = System.nanoTime();
 	                int pos = 98;

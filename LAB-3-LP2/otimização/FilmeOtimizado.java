@@ -96,7 +96,7 @@ public class FilmeOtimizado {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Filme other = (Filme) obj;
+        FilmeOtimizado other = (FilmeOtimizado) obj;
         return ano == other.getAno() && Objects.equals(nome, other.getNome());
     }
 
