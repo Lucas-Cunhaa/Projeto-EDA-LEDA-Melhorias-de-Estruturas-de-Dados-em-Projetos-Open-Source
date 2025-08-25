@@ -1,9 +1,8 @@
+package main.java;
 
+import java.util.Arrays;
 import java.util.Objects;
-  import java.util.Arrays;
-  import java.util.HashMap;
-  import java.util.stream.Collectors;
-public class FilmeOtimizado {
+import java.util.stream.Collectors;
 
 /**
  * Classe que representa um filme, com seu nome, ano de lançamento e locais onde pode ser assistido.
@@ -11,10 +10,12 @@ public class FilmeOtimizado {
  * 
  * Os filmes podem ter no máximo 5 locais de exibição.
  */
+public class Filme {
+
     /**
      * Limite máximo de locais onde um filme pode ser assistido.
      */
-    private static final int LIMITELOCAIS = 5;
+    private static final int limiteLocais = 5;
 
     /**
      * Nome do filme.
@@ -29,8 +30,7 @@ public class FilmeOtimizado {
     /**
      * Lista de locais onde o filme pode ser assistido.
      */
-    private HashMap<String,Integer> locaisAssistir;
-    private int locaisTail;
+    private String[] locaisAssistir;
 
     /**
      * Status de "favorito" do filme.
@@ -47,17 +47,16 @@ public class FilmeOtimizado {
      * @throws NullPointerException Se o nome do filme for nulo.
      * @throws IllegalArgumentException Se o nome do filme vazio.
      */
-    public FilmeOtimizado(String nome, int ano, String localAssistir) {
+    public Filme(String nome, int ano, String localAssistir) {
     	if (nome == null) 
         	throw new NullPointerException("FILME INVALIDO");
         if (nome.trim().isEmpty()) 
             throw new IllegalArgumentException("FILME INVALIDO");
         else this.nome = nome;
         this.ano = ano;
-        this.locaisAssistir = new HashMap<>();
+        this.locaisAssistir = new String[limiteLocais];
         this.adicionarLocalAssistir(localAssistir);
         this.statusHot = false; // Filme não é favorito por padrão
-        this.locaisTail = 0;
     }
 
     /**
@@ -96,8 +95,8 @@ public class FilmeOtimizado {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        FilmeOtimizado other = (FilmeOtimizado) obj;
-        return ano == other.getAno() && Objects.equals(nome, other.getNome());
+        Filme other = (Filme) obj;
+        return ano == other.ano && Objects.equals(nome, other.nome);
     }
 
     /**
@@ -115,7 +114,7 @@ public class FilmeOtimizado {
      * @return Um array com os locais de exibição do filme.
      */
     public String[] getLocalAssistir() {
-        return this.locaisAssistir.keySet().toArray(new String[0]);
+        return locaisAssistir;
     }
 
     /**
@@ -128,7 +127,7 @@ public class FilmeOtimizado {
         if (this.quantLocais() <= 1) return false;
         int indice = indiceLocal(nomeLocal);
         if (indice == -1) return false;
-        locaisAssistir.remove(nomeLocal);
+        locaisAssistir[indice] = null;
         return true;
     }
 
@@ -139,10 +138,11 @@ public class FilmeOtimizado {
      * @return O índice do local, ou -1 se o local não for encontrado.
      */
     private int indiceLocal(String nomeLocal) {
-        if (!this.locaisAssistir.containsKey(nomeLocal)){
-          return -1;
+        for (int i = 0; i < locaisAssistir.length; i++) {
+            if (locaisAssistir[i] == null) continue;
+            if (locaisAssistir[i].equals(nomeLocal)) return i;
         }
-        return this.locaisAssistir.get(nomeLocal); 
+        return -1; 
     }
 
     /**
@@ -160,8 +160,7 @@ public class FilmeOtimizado {
             throw new IllegalArgumentException("FILME INVALIDO");
         int indice = indicePermiteAdicionar(localAssistir);
         if (indice == -1) return false;
-        this.locaisAssistir.put(localAssistir, locaisTail);
-        this.locaisTail++;
+        locaisAssistir[indice] = localAssistir;
         return true;
     }
 
@@ -172,10 +171,10 @@ public class FilmeOtimizado {
      * @return O índice onde o local pode ser inserido, ou -1 se não for possível adicionar mais locais.
      */
     private int indicePermiteAdicionar(String localAssistir) {
-        if (this.locaisTail >= LIMITELOCAIS){
-          return -1;
+        for (int i = 0; i < locaisAssistir.length; i++) {
+            if (locaisAssistir[i] == null) return i;
         }
-        return this.locaisTail;
+        return -1;
     }
 
     /**
@@ -184,8 +183,7 @@ public class FilmeOtimizado {
      * @return Uma string contendo todos os locais onde o filme pode ser assistido, separados por vírgula.
      */
     public String toStringLocais() {
-      String[] locaisArray = this.locaisAssistir.keySet().toArray(new String[0]);
-        return Arrays.stream(locaisArray).filter(local -> local != null).collect(Collectors.joining(", "));
+        return Arrays.stream(locaisAssistir).filter(local -> local != null).collect(Collectors.joining(", "));
     }
 
     /**
@@ -221,7 +219,10 @@ public class FilmeOtimizado {
      * @return A quantidade de locais onde o filme pode ser assistido.
      */
     private int quantLocais() {
-        return this.locaisTail;
+        int quantLocais = 0;
+        for (String local : locaisAssistir) {
+            if (local != null) quantLocais += 1; 
+        }
+        return quantLocais;
     }
 }
-

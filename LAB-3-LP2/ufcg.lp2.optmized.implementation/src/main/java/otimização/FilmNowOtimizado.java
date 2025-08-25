@@ -1,3 +1,5 @@
+package main.java.otimização;
+
 import java.util.HashMap;
 
 /**
