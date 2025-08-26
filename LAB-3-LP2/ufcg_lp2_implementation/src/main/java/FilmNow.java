@@ -13,12 +13,12 @@ public class FilmNow {
     /**
      * Tamanho máximo da lista de filmes.
      */
-	private static final int TAMANHO = 100;
+	private static final int TAMANHO = 999999999;
 
     /**
      * Tamanho máximo da lista de filmes favoritos (Hot List).
      */
-	private static final int TAMANHO_HOT_LIST = 10;
+	private static final int TAMANHO_HOT_LIST = 999999999;
 	
     /**
      * Lista que contém os filmes.
