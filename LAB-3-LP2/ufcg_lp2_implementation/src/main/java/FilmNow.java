@@ -13,12 +13,12 @@ public class FilmNow {
     /**
      * Tamanho máximo da lista de filmes.
      */
-	private static final int TAMANHO = 999999999;
+	private static final int TAMANHO = 100;
 
     /**
      * Tamanho máximo da lista de filmes favoritos (Hot List).
      */
-	private static final int TAMANHO_HOT_LIST = 999999999;
+	private static final int TAMANHO_HOT_LIST = 100;
 	
     /**
      * Lista que contém os filmes.
@@ -34,9 +34,13 @@ public class FilmNow {
      * Cria um novo sistema FilmNow.
      * Inicializa as listas de filmes e de filmes favoritos.
      */
+	public FilmNow(int tamanho) {
+		this.filmes = new Filme[tamanho];
+		this.hotList = new Filme[tamanho];
+	}
+
 	public FilmNow() {
-		this.filmes = new Filme[TAMANHO];
-		this.hotList = new Filme[TAMANHO_HOT_LIST];
+		this(TAMANHO);
 	}
 	
     /**
