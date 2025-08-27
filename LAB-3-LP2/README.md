@@ -15,10 +15,11 @@ Este projeto foi desenvolvido como parte da disciplina de Estrutura de Dados com
 cd LAB-3-LP2
 
 # Comando para compilar o projeto
-javac -d bin .\ufcg.lp2.default.implementation\src\*.java
+javac .\ufcg.lp2.default.implementation\src\MainDefault.java
 
-# Comando para executar o programa principal
-java -cp bin ufcg.lp2.default.implementation.src.MainDefault
+# Comando para executar o programa principal, inserindo dados e escrevendo o processamento no arquivo .txt 
+java ufcg.lp2.default.implementation.src.MainDefault < data/tamanho.txt > results/cadastra_filmes_default.txt
+
 ````
 
 ## 📊 COMO GERAR OS GRÁFICOS
@@ -27,6 +28,7 @@ java -cp bin ufcg.lp2.default.implementation.src.MainDefault
 ```bash
 # Instale as dependências Python necessárias
 pip install matplotlib
+pip install chardet
 
 # rode o main.py que esta na raiz do reposítorio
 python main.py
@@ -42,5 +44,6 @@ python main.py
 .
 .
 .
-# basta escolher uma opção e ele gerará o gráfico do número de caso de entrada de dados e seus tempos de execução
+# basta escolher uma opção e ele gerará gráficos do número de caso de entrada de dados e seus tempos de execução
 ````
+
