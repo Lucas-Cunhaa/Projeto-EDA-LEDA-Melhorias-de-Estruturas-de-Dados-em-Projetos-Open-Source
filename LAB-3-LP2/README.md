@@ -1,0 +1,46 @@
+# Projeto de Otimização de Performance - EDA/LEDA - LAB
+## 🎯 Propósito do Projeto
+Este projeto foi desenvolvido como parte da disciplina de Estrutura de Dados com o objetivo principal de demonstrar e implementar otimizações de algoritmos, reduzindo drasticamente o tempo de execução de operações críticas. Através de otimizações, transformamos algoritmos lentos e ineficientes em soluções rápidas e escaláveis, assim, como na alteração de estrutura de dados, buscando uma implementação mais adequada para o caso de uso.
+## 🔍 O Que Foi Otimizado:
+
+#### *Antes: Algoritmos lentos com complexidade O(n) - o tempo de execução crescia linearmente com o tamanho dos dados*
+#### *Depois: Algoritmos eficientes com complexidade O(1) - tempo de execução constante, independente do tamanho dos dados*
+
+## 🧪 COMO RODAR O TESTE DE EXECUÇÃO
+
+### Compilação e Execução via Terminal:
+
+```bash
+# Navegue até a pasta do projeto
+cd LAB-3-LP2
+
+# Comando para compilar o projeto
+javac -d bin .\ufcg.lp2.default.implementation\src\*.java
+
+# Comando para executar o programa principal
+java -cp bin ufcg.lp2.default.implementation.src.MainDefault
+````
+
+## 📊 COMO GERAR OS GRÁFICOS
+
+### Pré-requisitos:
+```bash
+# Instale as dependências Python necessárias
+pip install matplotlib
+
+# rode o main.py que esta na raiz do reposítorio
+python main.py
+````
+
+### Entendendo como gerar o gráfico dos dados no arquivos .txt:
+
+````bash
+# Exemplo de opções:
+
+(1) resultCadastraFilmesBeforeOptimization.txt -> teste do méthodo Cadastra Filme antes da otimização {O(n)}
+(2) resultCadastraFilmesAfterOptimization.txt -> teste do méthodo Cadastra Filme depois da otimização {O(1)}
+.
+.
+.
+# basta escolher uma opção e ele gerará o gráfico do número de caso de entrada de dados e seus tempos de execução
+````
