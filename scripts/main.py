@@ -1,31 +1,40 @@
 import matplotlib.pyplot as plt 
 import numpy as np 
 import re
+import chardet
+import os
 
 def parse_file(filename):
     """
-    Lê o arquivo e extrai os dados de tempo e amostra
+    Lê o arquivo e extrai os dados de tempo e amostra,
+    detectando automaticamente o encoding.
     """
     amostras = []
     tempos_ms = []
-    
+
     try:
-        with open(filename, 'r', encoding='utf-8') as file:
-            lines = file.readlines()
-            
-            # Pula o cabeçalho se existir
-            for line in lines:
-                if line.strip() and 'Method Time Sample' not in line:
-                    # Usa regex para extrair números
-                    numbers = re.findall(r'\d+', line)
-                    if len(numbers) >= 2:
-                        tempo = int(numbers[0])
-                        amostra = int(numbers[1])
-                        amostras.append(amostra)
-                        tempos_ms.append(tempo)
-                        
+        # lê os bytes crus
+        with open(filename, 'rb') as file:
+            raw = file.read()
+
+        # detecta encoding
+        enc = chardet.detect(raw)['encoding']
+
+        # decodifica usando o encoding detectado
+        text = raw.decode(enc)
+
+        # processa linha a linha
+        for line in text.splitlines():
+            if line.strip() and 'Method Time Sample' not in line:
+                numbers = re.findall(r'\d+', line)
+                if len(numbers) >= 2:
+                    tempo = int(numbers[0])
+                    amostra = int(numbers[1])
+                    amostras.append(amostra)
+                    tempos_ms.append(tempo)
+
         return amostras, tempos_ms
-        
+
     except FileNotFoundError:
         print(f"Erro: Arquivo '{filename}' não encontrado!")
         return [], []
@@ -48,37 +57,53 @@ def create_plots(amostras, tempos_ms, method_name):
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
     fig.suptitle(f'Análise de Desempenho - Método: {method_name}', fontsize=16, fontweight='bold')
     
+    # Ajuste do espaçamento
+    fig.subplots_adjust(top=0.88, hspace=0.5, wspace=0.3)
+    
     # Gráfico 1: Linha (ms)
-    ax1.plot(amostras, tempos_ms, 'o-', linewidth=2, markersize=8, color='blue', markerfacecolor='white', markeredgewidth=2)
-    ax1.set_title('Tempo de Execução vs Tamanho da Amostra')
+    ax1.plot(amostras, tempos_ms, 'o-', linewidth=2, markersize=8, 
+         color='blue', markerfacecolor='white', markeredgewidth=2)
+
+    # Título do subplot
+    ax1.set_title('Tempo de Execução vs Tamanho da Amostra', fontsize=10)
+
+    # Eixos
     ax1.set_xlabel('Tamanho da Amostra (quantidade)')
     ax1.set_ylabel('Tempo (ms)')
+
+    # Grid
     ax1.grid(True, alpha=0.3)
-    
-    # Adicionar valores nos pontos
-    for i, (x, y) in enumerate(zip(amostras, tempos_ms)):
-        ax1.annotate(f'{y/1000:.1f}s', (x, y), textcoords="offset points", 
-                    xytext=(0,10), ha='center', fontsize=8)
+
+    # Forçar o eixo Y começar em 0
+    ax1.set_ylim(bottom=0)
     
     # Gráfico 2: Linha (segundos)
     ax2.plot(amostras, tempos_segundos, 's-', linewidth=2, markersize=8, color='red', markerfacecolor='white', markeredgewidth=2)
-    ax2.set_title('Tempo de Execução vs Tamanho da Amostra')
+    ax2.set_title('Tempo de Execução vs Tamanho da Amostra', fontsize=10)
     ax2.set_xlabel('Tamanho da Amostra (quantidade)')
     ax2.set_ylabel('Tempo (segundos)')
     ax2.grid(True, alpha=0.3)
+    
+    ax2.set_ylim(bottom=0)
     
     # Gráfico 3: Barras
     bars = ax3.bar([str(a) for a in amostras], tempos_ms, 
                   color=plt.cm.viridis(np.linspace(0, 1, len(amostras))), 
                   alpha=0.7, edgecolor='black')
-    ax3.set_title('Tempo por Tamanho de Amostra')
+    # Definindo quais posições terão rótulos no eixo X
+    intervalo = 10 if len(amostras) > 75 else 5
+
+    indices = list(range(0, len(amostras), intervalo))
+    
+    if indices[-1] != len(amostras) - 1:
+        indices.append(len(amostras) - 1)
+
+    ax3.set_xticks(indices)
+    ax3.set_xticklabels([amostras[i] for i in indices])
+
+    ax3.set_title('Tempo por Tamanho de Amostra', fontsize=10)
     ax3.set_xlabel('Tamanho da Amostra')
     ax3.set_ylabel('Tempo (ms)')
-    
-    # Adicionar valores nas barras
-    for bar, tempo in zip(bars, tempos_ms):
-        ax3.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(tempos_ms)*0.02, 
-                f'{tempo/1000:.1f}s', ha='center', va='bottom', fontsize=9, fontweight='bold')
     
     # Gráfico 4: Tendência com regressão
     ax4.scatter(amostras, tempos_ms, color='green', s=100, alpha=0.7, edgecolor='black')
@@ -89,7 +114,7 @@ def create_plots(amostras, tempos_ms, method_name):
     ax4.plot(amostras, p(amostras), "r--", alpha=0.8, linewidth=2,
              label=f'y = {z[0]:.1f}x + {z[1]:.1f}')
     
-    ax4.set_title('Tendência do Tempo de Execução')
+    ax4.set_title('Tendência do Tempo de Execução', fontsize=10)
     ax4.set_xlabel('Tamanho da Amostra')
     ax4.set_ylabel('Tempo (ms)')
     ax4.legend()
@@ -111,7 +136,18 @@ def main():
     Função principal
     """
     # Nome do arquivo - altere conforme necessário
-    filename = "LAB-3-LP2/results/result.txt"
+    directory = "../LAB-3-LP2/results/"
+    
+    itens = os.listdir(directory)
+    
+    # Filtra apenas arquivos
+    arquivos = [f for f in itens if os.path.isfile(os.path.join(directory, f))]
+    
+    print("Escolha o arquivo que deseja plotar o Gráfico:")
+    for i in range(len(arquivos)):
+        print(f'({i + 1}) {arquivos[i]}')
+        
+    filename = directory + arquivos[int(input()) - 1]
     
     # Lê os dados do arquivo
     print(f"Lendo arquivo: {filename}")
