@@ -21,17 +21,19 @@ public class Main {
 					for (String tamanho : tokens) {
 						long time = 0;
 						FilmNowOtimizado fmOtm = new FilmNowOtimizado();
-
+						fmOtm.cadastraFilme(NOME_FILME_TESTE, ANO_FILME_TESTE, NOME_LOCAL_TESTE);
+						
 						for (int i = 0; i <= QUANTIDADE_EXECUCAO_POR_AMOSTRA; i++) {	
 							long start = System.nanoTime();
-							fmOtm.cadastraFilme(NOME_FILME_TESTE, ANO_FILME_TESTE, NOME_LOCAL_TESTE);
+							fmOtm.adicionarHot(NOME_FILME_TESTE);
 
 							long end = System.nanoTime();
 	               			time += (end - start) / QUANTIDADE_EXECUCAO_POR_AMOSTRA;
 
-							fmOtm.removerFilme(NOME_FILME_TESTE);
+							//fmOtm.removerFilme(NOME_FILME_TESTE);
+							fmOtm.removerHot(NOME_FILME_TESTE);
 						}
-						System.out.println("Cadastra-Filmes-OTIMIZADO " + time +  " " + tamanho);
+						System.out.println("Adicionar-Hot-OTIMIZADO " + time +  " " + tamanho);
 					}
 	            }
 	        } catch (IOException ioe) {}

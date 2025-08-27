@@ -124,14 +124,19 @@ public class FilmNow {
 		try {
 			verificarLimites(posicaoHotList, hotList);
 			verificarLimites(posicaoFilme, filmes);
+
 			if (existeFilme(filmes[posicaoFilme - 1], hotList)) 
 				return "FILME JA ADICIONADO!";
+
 			if (filmes[posicaoFilme - 1] == null) 
 				return "FILME NAO EXISTENTE!";
+
 			if (hotList[posicaoHotList - 1] != null) 
 				hotList[posicaoHotList - 1].setStatusHot(false);
+
 			hotList[posicaoHotList - 1] = filmes[posicaoFilme - 1];
 			hotList[posicaoHotList - 1].setStatusHot(true);
+			
 			return "ADICIONADO À HOTLIST NA POSIÇÃO " + posicaoHotList + "!";
 		} catch(ArrayIndexOutOfBoundsException e) {
 			return e.getMessage();

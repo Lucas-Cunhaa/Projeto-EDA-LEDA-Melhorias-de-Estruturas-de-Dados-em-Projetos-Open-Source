@@ -21,24 +21,46 @@ public class MainDefault {
 
 					for (String tamanho : tokens) {
 						long time = 0;
+
 						if(tamanho.equals("") ||tamanho.equals(" ")) continue;
+
 						FilmNow fm = new FilmNow(Integer.parseInt(tamanho));
+						fm.cadastraFilme(1, tamanho, 0, line);
 
 						for (int i = 0; i <= QUANTIDADE_EXECUCAO_POR_AMOSTRA; i++) {	
-							long start = System.nanoTime();
-							fm.cadastraFilme(1, tamanho, 0, line);
-
-							long end = System.nanoTime();
-	               			time += (end - start) / QUANTIDADE_EXECUCAO_POR_AMOSTRA;
-
-							fm.removerFilme(1);
+	               			//time += testCadastraFilmes(fm);
+							time += testAddHotFilmes(fm);
 						}
-						System.out.println("Cadastra-Filmes " + (time) + " " + tamanho);
+
+						System.out.println("Adicionar-Hot " + (time) + " " + tamanho);
 					}
 	            }
 	        } catch (IOException ioe) {}
     }
 
+	public static long testCadastraFilmes(FilmNow fm) {
+		long start = System.nanoTime();
+		fm.cadastraFilme(1, NOME_FILME_TESTE, ANO_FILME_TESTE, NOME_LOCAL_TESTE);
+
+		long end = System.nanoTime();
+
+		fm.removerFilme(1);
+		
+
+		return (end - start) / QUANTIDADE_EXECUCAO_POR_AMOSTRA;
+	}
+
+	public static long testAddHotFilmes(FilmNow fm) {
+		long start = System.nanoTime();
+		fm.adicionarHot(1, 1);
+
+		long end = System.nanoTime();
+
+		fm.removerHot(1);
+		
+
+		return (end - start) / QUANTIDADE_EXECUCAO_POR_AMOSTRA;
+	}
 }
 
 
