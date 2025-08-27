@@ -18,7 +18,7 @@ cd LAB-3-LP2
 javac .\ufcg.lp2.default.implementation\src\MainDefault.java
 
 # Comando para executar o programa principal, inserindo dados e escrevendo o processamento no arquivo .txt 
-java ufcg.lp2.default.implementation.src.MainDefault < data/tamanho.txt > results/cadastra_filmes_default.txt
+data/tamanho.txt < java ufcg.lp2.default.implementation.src.MainDefault > results/cadastra_filmes_default.txt
 
 ````
 
@@ -46,4 +46,5 @@ python main.py
 .
 # basta escolher uma opção e ele gerará gráficos do número de caso de entrada de dados e seus tempos de execução
 ````
+
 
