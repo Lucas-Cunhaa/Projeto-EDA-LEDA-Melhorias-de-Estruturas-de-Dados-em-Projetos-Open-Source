@@ -9,7 +9,7 @@ public class MainDefault {
 	public static final String NOME_FILME_TESTE = "Filme Teste"; 
 	public static final int ANO_FILME_TESTE = 1;
 	public static final String NOME_LOCAL_TESTE = "Local Test"; 
-    public static final int QUANTIDADE_EXECUCAO_POR_AMOSTRA = 1;
+    public static final int QUANTIDADE_EXECUCAO_POR_AMOSTRA = 20;
     public static void main(String[] args) {
           try {
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
