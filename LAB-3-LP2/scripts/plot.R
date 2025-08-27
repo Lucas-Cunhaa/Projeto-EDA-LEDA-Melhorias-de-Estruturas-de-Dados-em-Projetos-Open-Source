@@ -6,4 +6,4 @@ library('ggplot2')
 args <- commandArgs()
 
 data = read.table(args[length(args)], header = T)
-ggplot(data, aes(x = sample, y = time, colour = alg)) + geom_line()
+ggplot(data, aes(x = Sample, y = Time, colour = Method)) + geom_line()

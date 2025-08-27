@@ -111,7 +111,7 @@ def main():
     Função principal
     """
     # Nome do arquivo - altere conforme necessário
-    filename = "LAB-3-LP2/input-output-data/results/" + input()
+    filename = "LAB-3-LP2/results/result.txt"
     
     # Lê os dados do arquivo
     print(f"Lendo arquivo: {filename}")
