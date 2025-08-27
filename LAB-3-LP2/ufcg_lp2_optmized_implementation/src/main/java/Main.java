@@ -8,13 +8,13 @@ public class Main {
 	public static final String NOME_FILME_TESTE = "Filme Teste"; 
 	public static final int ANO_FILME_TESTE = 1;
 	public static final String NOME_LOCAL_TESTE = "Local Test"; 
-    public static final int QUANTIDADE_EXECUCAO_POR_AMOSTRA = 1000;
+    public static final int QUANTIDADE_EXECUCAO_POR_AMOSTRA = 1000000;
     public static void main(String[] args) {
           try {
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	            String line = "";
 
-	            System.out.println("Method Sample Time");
+	           // System.out.println("Method Time Sample");
 	            while ((line = reader.readLine()) != null) {
 	                String[] tokens = line.split(" ");
 
@@ -31,7 +31,7 @@ public class Main {
 
 							fmOtm.removerFilme(NOME_FILME_TESTE);
 						}
-						System.out.println("Cadastra-Filmes-OTIMIZADO " + tamanho+  " " + (time));
+						System.out.println("Cadastra-Filmes-OTIMIZADO " + time +  " " + tamanho);
 					}
 	            }
 	        } catch (IOException ioe) {}
