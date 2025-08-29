@@ -4,8 +4,19 @@ import time
 pygame.font.init()
 
 
+
 class Grid:
-    board = [[0 for _ in range(9)] for _ in range(9)]
+    board = [
+        [7, 8, 0, 4, 0, 0, 1, 2, 0],
+        [6, 0, 0, 0, 7, 5, 0, 0, 9],
+        [0, 0, 0, 6, 0, 1, 0, 7, 8],
+        [0, 0, 7, 0, 4, 0, 2, 6, 0],
+        [0, 0, 1, 0, 5, 0, 9, 3, 0],
+        [9, 0, 4, 0, 6, 0, 0, 0, 5],
+        [0, 7, 0, 3, 0, 0, 0, 1, 2],
+        [1, 2, 0, 0, 0, 7, 4, 0, 0],
+        [0, 4, 9, 2, 0, 6, 0, 0, 7]
+    ]
     
 
     def __init__(self, rows, cols, width, height, win):
@@ -19,6 +30,14 @@ class Grid:
         self.height = height
         self.selected = None
         self.win = win
+        for i in range(9):
+            for j in range(9):
+                if self.board[i][j] != 0:
+                    val = self.board[i][j]
+                    box_index = (i // 3) * 3 + (j // 3)
+                    self.row_sets[i].add(val)
+                    self.col_sets[j].add(val)
+                    self.box_sets[box_index].add(val)
 
     def valid(self, val,pos):
         row, col = pos
