@@ -137,6 +137,7 @@ data/tamanho.txt < java ufcg_lp2_implementation\src\MainDefault  > results/cadas
 ```bash
 - Instale **R**
 - Instalar o pacote **ggplot2**
+comando apra isntalar o ggplot2: install.packages("ggplot2")
 ````
 
 #### Executar o script em R
@@ -191,5 +192,6 @@ python main.py
 - **Henrique** - Classe *Filme*
 - **Caio & Letícia** - Classe *FilmNow*
 - **João & Lucas** - Testes de Experimentação
+
 
 
