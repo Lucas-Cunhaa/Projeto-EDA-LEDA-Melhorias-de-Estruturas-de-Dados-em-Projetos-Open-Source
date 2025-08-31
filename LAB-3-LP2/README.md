@@ -187,7 +187,7 @@ python main.py
 ```
 
 
-## 👯 Equipe
+## 👥 Equipe
 - **Henrique** - Classe *Filme*
 - **Caio & Letícia** - Classe *FilmNow*
 - **João & Lucas** - Testes de Experimentação
