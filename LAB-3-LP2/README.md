@@ -7,7 +7,7 @@ Este projeto foi desenvolvido como parte da disciplina de Estrutura de Dados com
 #### *Depois: Algoritmos eficientes com complexidade O(1) - tempo de execução constante, independente do tamanho dos dados*
 
 
-## Estrutura das pastas
+## 📁 Estrutura das pastas
 - **data/**  → contém os arquivos de entrada (ex: `tamanho.txt`)  
 - **results/** → armazena os resultados em `.txt` após a execução dos testes  
 - **graphs/** → contém os gráficos gerados no R em formato `.pdf`  
@@ -191,7 +191,7 @@ python main.py
 - **Henrique** - Classe *Filme*
 - **Caio & Letícia** - Classe *FilmNow*
 - **João & Lucas** - Testes de Experimentação
-
+```
 
 
 
