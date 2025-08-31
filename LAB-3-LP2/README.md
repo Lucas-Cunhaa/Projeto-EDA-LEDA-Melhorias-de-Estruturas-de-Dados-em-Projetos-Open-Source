@@ -147,7 +147,7 @@ Para rodar o script `plot.R`, use o seguinte comando:
 ```bash
 R < plot.R --vanilla ../../results/cadastra_filmes.txt
 
-````bash
+```bash
 # Exemplo de opções:
 
 (1) results/cadastra_filmes.txt -> teste do método Cadastra Filme antes da otimização {O(n)}
@@ -186,12 +186,10 @@ python main.py
 # basta escolher uma opção e ele gerará gráficos do número de caso de entrada de dados e seus tempos de execução
 ```
 
-```
-## 👥 Equipe
+
+## 👯 Equipe
 - **Henrique** - Classe *Filme*
 - **Caio & Letícia** - Classe *FilmNow*
 - **João & Lucas** - Testes de Experimentação
-```
-
 
 
