@@ -43,5 +43,5 @@ Implementei um sistema baseado em **conjuntos (sets)** para rastreamento eficien
 - **`valid()`**: Reduzido de O(n) para O(1) usando operações de set
 - **`place()`**: Inserção com validação O(1) e atualização de estados
 - **`remove_number()`**: Nova função para remoção eficiente com O(1)
--- **`solve()`**: Algoritmo adaptado para gerenciar estados durante backtracking com operações O(1)
+- **`solve()`**: Algoritmo adaptado para gerenciar estados durante backtracking com operações O(1)
 - **`solve_gui()`**: Versão visual com atualização eficiente de conjuntos durante animação
