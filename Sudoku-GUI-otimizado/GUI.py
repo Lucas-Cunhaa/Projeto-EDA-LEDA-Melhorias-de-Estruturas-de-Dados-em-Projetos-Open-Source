@@ -4,7 +4,6 @@ import time
 pygame.font.init()
 
 
-
 class Grid:
     board = [
         [7, 8, 0, 4, 0, 0, 1, 2, 0],
@@ -17,71 +16,34 @@ class Grid:
         [1, 2, 0, 0, 0, 7, 4, 0, 0],
         [0, 4, 9, 2, 0, 6, 0, 0, 7]
     ]
-    
 
     def __init__(self, rows, cols, width, height, win):
         self.rows = rows
         self.cols = cols
         self.cubes = [[Cube(self.board[i][j], i, j, width, height) for j in range(cols)] for i in range(rows)]
-        self.row_sets = [set() for _ in range(9)]    
-        self.box_sets = [set() for _ in range(9)]
-        self.col_sets = [set() for _ in range(9)]
         self.width = width
         self.height = height
+        self.model = None
+        self.update_model()
         self.selected = None
         self.win = win
-        for i in range(9):
-            for j in range(9):
-                if self.board[i][j] != 0:
-                    val = self.board[i][j]
-                    box_index = (i // 3) * 3 + (j // 3)
-                    self.row_sets[i].add(val)
-                    self.col_sets[j].add(val)
-                    self.box_sets[box_index].add(val)
 
-    def valid(self, val,pos):
-        row, col = pos
-        box_index = (row//3) * 3 + (col//3)
-        if val in self.col_sets[col] or val in self.row_sets[row] or val in self.box_sets[box_index]:
-                return False
-        
-        return True
+    def update_model(self):
+        self.model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
 
     def place(self, val):
         row, col = self.selected
         if self.cubes[row][col].value == 0:
-            box_index = (row//3) * 3 + (col//3)
-
-            if val in self.col_sets[col] or val in self.row_sets[row] or val in self.box_sets[box_index]:
-                return False
-            
             self.cubes[row][col].set(val)
-            self.col_sets[col].add(val)
-            self.row_sets[row].add(val)
-            self.box_sets[box_index].add(val)
-            
-            return True
-        
-        return False
-    
-    def remove_number(self):
-        row, col = self.selected
-        if self.cubes[row][col].value != 0:  
-            val = self.cubes[row][col].value  
-            box_index = (row//3) * 3 + (col//3)  
+            self.update_model()
 
-            if val in self.row_sets[row]:
-                self.row_sets[row].remove(val)
-            if val in self.col_sets[col]:
-                self.col_sets[col].remove(val)
-            if val in self.box_sets[box_index]:
-                self.box_sets[box_index].remove(val)
-    
-            self.cubes[row][col].set(0)  
-            self.cubes[row][col].set_temp(0)  
-            return True  
-        return False
-
+            if valid(self.model, val, (row,col)) and self.solve():
+                return True
+            else:
+                self.cubes[row][col].set(0)
+                self.cubes[row][col].set_temp(0)
+                self.update_model()
+                return False
 
     def sketch(self, val):
         row, col = self.selected
@@ -131,70 +93,54 @@ class Grid:
             return None
 
     def is_finished(self):
-        for row_set in self.row_sets:
-            if len(row_set) != 9:
-                return False
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.cubes[i][j].value == 0:
+                    return False
         return True
 
     def solve(self):
-        temp_model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
-        find = find_empty(temp_model)
+        find = find_empty(self.model)
         if not find:
             return True
         else:
             row, col = find
 
         for i in range(1, 10):
-            if self.valid(i, (row, col)):
-                box_index = (row//3) * 3 + (col//3)
-                self.row_sets[row].add(i)
-                self.col_sets[col].add(i)
-                self.box_sets[box_index].add(i)
-                temp_model[row][col] = i
+            if valid(self.model, i, (row, col)):
+                self.model[row][col] = i
 
                 if self.solve():
                     return True
-                
-                self.row_sets[row].remove(i)
-                self.col_sets[col].remove(i)
-                self.box_sets[box_index].remove(i)
-                temp_model[row][col] = 0
+
+                self.model[row][col] = 0
 
         return False
 
     def solve_gui(self):
-        temp_model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
-        find = find_empty(temp_model)
+        self.update_model()
+        find = find_empty(self.model)
         if not find:
             return True
         else:
             row, col = find
 
         for i in range(1, 10):
-            if self.valid(i, (row, col)):
-                box_index = (row//3) * 3 + (col//3)
-            
-                self.row_sets[row].add(i)
-                self.col_sets[col].add(i)
-                self.box_sets[box_index].add(i)
-                
-                temp_model[row][col] = i
+            if valid(self.model, i, (row, col)):
+                self.model[row][col] = i
                 self.cubes[row][col].set(i)
                 self.cubes[row][col].draw_change(self.win, True)
-
+                self.update_model()
                 pygame.display.update()
                 pygame.time.delay(100)
 
                 if self.solve_gui():
                     return True
-                
-                self.row_sets[row].remove(i)
-                self.col_sets[col].remove(i)
-                self.box_sets[box_index].remove(i)
-                temp_model[row][col] = 0
-                self.cubes[row][col].set(0)
-                self.cubes[row][col].draw_change(self.win, False)
 
+                self.model[row][col] = 0
+                self.cubes[row][col].set(0)
+                self.update_model()
+                self.cubes[row][col].draw_change(self.win, False)
                 pygame.display.update()
                 pygame.time.delay(100)
 
@@ -261,6 +207,29 @@ def find_empty(bo):
                 return (i, j)  # row, col
 
     return None
+
+
+def valid(bo, num, pos):
+    # Check row
+    for i in range(len(bo[0])):
+        if bo[pos[0]][i] == num and pos[1] != i:
+            return False
+
+    # Check column
+    for i in range(len(bo)):
+        if bo[i][pos[1]] == num and pos[0] != i:
+            return False
+
+    # Check box
+    box_x = pos[1] // 3
+    box_y = pos[0] // 3
+
+    for i in range(box_y*3, box_y*3 + 3):
+        for j in range(box_x * 3, box_x*3 + 3):
+            if bo[i][j] == num and (i,j) != pos:
+                return False
+
+    return True
 
 
 def redraw_window(win, board, time, strikes):
@@ -337,11 +306,8 @@ def main():
                     key = 8
                 if event.key == pygame.K_KP9:
                     key = 9
-                if event.key == pygame.K_d:
-                    if board.remove_number():
-                        print("number removed")
-                    else:
-                        board.clear()
+                if event.key == pygame.K_DELETE:
+                    board.clear()
                     key = None
 
                 if event.key == pygame.K_SPACE:
