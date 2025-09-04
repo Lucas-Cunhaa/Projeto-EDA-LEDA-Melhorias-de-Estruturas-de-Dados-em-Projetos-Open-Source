@@ -45,3 +45,19 @@ Implementei um sistema baseado em **conjuntos (sets)** para rastreamento eficien
 - **`remove_number()`**: Nova função para remoção eficiente com O(1)
 - **`solve()`**: Algoritmo adaptado para gerenciar estados durante backtracking com operações O(1)
 - **`solve_gui()`**: Versão visual com atualização eficiente de conjuntos durante animação
+
+## 📊 Iniciando os Testes
+
+### Arquivos do projeto
+Certifique-se que os três arquivos a seguir estão na mesma pasta
+- **`GUI.py`**: O código-fonte da versão original do solucionador de Sudoku.
+- **`GUI_otimizado.py`**: O código-fonte da versão otimizada do solucionador.
+- **`benchmark.py`**: O script que executa os testes de benchmark, compara o tempo de ambas as versões e gera os gráficos.
+
+### Bibliotecas Python
+Você precisará de duas bibliotecas instaladas em seu ambiente Python. Use o gerenciador de pacotes pip para instalá-las:
+```bash
+# matplotlib: Utilizada para gerar os gráficos de performance.
+# pygame: Necessária para as classes e funções das interfaces gráficas (GUI.py e GUI_otimizado.py), que são usadas como base para o script de benchmark.
+pip install matplotlib pygame
+````
