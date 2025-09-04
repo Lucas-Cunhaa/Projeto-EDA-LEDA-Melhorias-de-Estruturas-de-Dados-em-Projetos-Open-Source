@@ -46,7 +46,7 @@ Implementei um sistema baseado em **conjuntos (sets)** para rastreamento eficien
 - **`solve()`**: Algoritmo adaptado para gerenciar estados durante backtracking com operações O(1)
 - **`solve_gui()`**: Versão visual com atualização eficiente de conjuntos durante animação
 
-## 📊 Iniciando os Testes
+## 📊 Inicializando o ambiente para os testes
 
 ### Arquivos do projeto
 Certifique-se que os três arquivos a seguir estão na mesma pasta
@@ -61,3 +61,23 @@ Você precisará de duas bibliotecas instaladas em seu ambiente Python. Use o ge
 # pygame: Necessária para as classes e funções das interfaces gráficas (GUI.py e GUI_otimizado.py), que são usadas como base para o script de benchmark.
 pip install matplotlib pygame
 ````
+## 🧪 Como gerar os gráficos de Desempenho
+Com os arquivos no lugar e as bibliotecas instaladas, o processo é direto e simples.
+
+1. **Abra o Terminal ou Prompt de Comando**  
+   Navegue até a pasta onde você salvou os arquivos.
+
+   ```bash
+   cd [caminho_da_sua_pasta]
+   ````
+   
+2. **Execute o Script de Comparação**
+   Execute o script benchmark.py com o seguinte comando:
+   ```bash
+   # O script começará a rodar os testes. Você verá mensagens de progresso no terminal, como "Testando com X células vazias...". O processo pode levar alguns minutos, dependendo da sua máquina.
+   python benchmark.py
+   ````
+3. **Visualize os resultados**
+  Após a conclusão dos testes, uma nova pasta chamada resultados será criada na mesma pasta que os arquivos. Dentro dela, você encontrará:
+  - Quatro gráficos em formato PNG **`.png`**, que visualizam a performance de ambas as versões.
+  - Um arquivo de texto **`.txt`** com um relatório detalhado das métricas de tempo.
