@@ -136,7 +136,7 @@ def main():
     Função principal
     """
     # Nome do arquivo - altere conforme necessário
-    directory = "../LAB-3-LP2/results/"
+    directory = "../Python-Open-Source-Algorithms/results/"
     
     itens = os.listdir(directory)
     
