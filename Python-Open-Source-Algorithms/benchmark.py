@@ -2,7 +2,7 @@ import time
 
 def gerar_casos(tamanhos_itemset, num_candidates, tamanho_candidate):
     """
-    Gera vários casos de teste para benchmarking.
+    Gera vários casos de teste para benchmarking com apenas strings.
     
     :param tamanhos_itemset: lista de tamanhos de itemsets, ex: [1000, 2000, 5000]
     :param num_candidates: número de candidatos por caso
@@ -11,9 +11,10 @@ def gerar_casos(tamanhos_itemset, num_candidates, tamanho_candidate):
     """
     casos = []
     for n in tamanhos_itemset:
-        itemset = list(range(n))
-        # candidatos são todos contidos no itemset para pior caso
-        candidates = [list(range(tamanho_candidate)) for _ in range(num_candidates)]
+        # itemset como strings
+        itemset = [str(i) for i in range(n)]
+        # candidatos também como strings
+        candidates = [[str(i) for i in range(tamanho_candidate)] for _ in range(num_candidates)]
         casos.append({
             "itemset": itemset,
             "candidates": candidates

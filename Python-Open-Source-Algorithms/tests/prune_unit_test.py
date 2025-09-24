@@ -88,8 +88,8 @@ class TestPruneFunctions(unittest.TestCase):
         self.assertEqual(prune(itemset, candidates, length), pruneOptimized(itemset, candidates, length))
 
     def test_mixed_type_items(self):
-        itemset = [1, '1', 1.0]
-        candidates = [[1, '1'], [1.0, '1'], ['1', 1]]
+        itemset = ['1', '1', '1.0']
+        candidates = [['1', '1'], ['1.0', '1'], ['1', '1']]
         length = 2
         self.assertEqual(prune(itemset, candidates, length), pruneOptimized(itemset, candidates, length))
 

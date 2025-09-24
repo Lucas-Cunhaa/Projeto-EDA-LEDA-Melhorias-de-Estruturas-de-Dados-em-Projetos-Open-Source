@@ -7,7 +7,7 @@ def test_performance(caso, func):
     Returns the average execution time of the function
     """
     time_total = 0
-    times_to_run = 1_000
+    times_to_run = 100
     
     for _ in range(times_to_run):
         time_total += medir_tempo(caso, func) / times_to_run
