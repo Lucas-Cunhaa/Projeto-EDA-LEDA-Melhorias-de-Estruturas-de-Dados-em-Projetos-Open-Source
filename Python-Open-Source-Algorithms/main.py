@@ -45,7 +45,7 @@ def write_results_to_file(functions_results: list, functions_names: list):
 if __name__ == "__main__":
     tamanhos_itemset = [i for i in range(1000, 101_000, 1_000)] # Tamanhos para casos de testes -> numero variável 
     
-    num_candidates = 200 # Numero de candidatos em cada caso de teste -> numero fixo
+    num_candidates = 100 # Numero de candidatos em cada caso de teste -> numero fixo
     tamanho_candidate = 10 # Tamanho de cada candidato -> numero fixo
 
     casos = gerar_casos(tamanhos_itemset, num_candidates, tamanho_candidate)
