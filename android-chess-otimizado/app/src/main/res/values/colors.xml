@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#5eb8ff</color>
+    <color name="primaryVariantColor">#0288d1</color>
+    <color name="secondaryColor">#49a61e</color>
+    <color name="secondaryVariantColor">#2a8003</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#000000</color>
+    <color name="backgroundColor">#fafafa</color>
+    <color name="textOnBackgroundColor">#000000</color>
+    <color name="surfaceColor">#eeeeee</color>
+    <color name="surfaceTextColor">#000000</color>
+    <color name="primaryColorDisabled">#888888</color>
+    <color name="wrongColor">#D96227</color>
+    <color name="paneBackgroundColor">#879FB6</color>
+</resources>
