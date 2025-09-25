@@ -20,8 +20,8 @@ def pruneOptimized(itemset: list, candidates: list, length: int) -> list:
     for candidate in candidates: 
         is_subsequence = True
         for item in candidate:
-            tupla = tuple(item)
-            if tupla not in itemset_counter or itemset_counter[tupla] < length - 1: 
+            item_times = itemset_counter[tuple(item)]
+            if item_times == 0 or item_times < length - 1: # O(1) 
                 is_subsequence = False
                 break
         if is_subsequence:

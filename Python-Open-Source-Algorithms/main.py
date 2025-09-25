@@ -1,4 +1,4 @@
-from benchmark import gerar_casos, medir_tempo
+from benchmark import gerar_casos_benchmark, medir_tempo
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from prune_algorithms import prune, pruneOptimized
 
@@ -18,7 +18,7 @@ def test_performance(caso, func):
     }
 
 
-def append_results_to_file(casos, func):
+def append_results_to_file(casos, func, test_name):
     results = []
 
     # Executa cada caso em paralelo
@@ -29,7 +29,7 @@ def append_results_to_file(casos, func):
             results.append(future.result())
             
     # Salva resultados -> individuais nesse caso
-    write_results_to_file([results], [func.__name__])
+    write_results_to_file([results], [func.__name__ + test_name])
             
     return results
 
@@ -41,26 +41,41 @@ def write_results_to_file(functions_results: list, functions_names: list):
         for i in range(len(functions_results)):
             for result in functions_results[i]:
                 file.write(f"{functions_names[i]} {result['time(ns)']} {result['n_itemset']}\n")
-
+                
 if __name__ == "__main__":
     tamanhos_itemset = [i for i in range(1000, 101_000, 1_000)] # Tamanhos para casos de testes -> numero variável 
     
     num_candidates = 100 # Numero de candidatos em cada caso de teste -> numero fixo
     tamanho_candidate = 10 # Tamanho de cada candidato -> numero fixo
 
-    casos = gerar_casos(tamanhos_itemset, num_candidates, tamanho_candidate)
+    casos = gerar_casos_benchmark(tamanhos_itemset, num_candidates, tamanho_candidate)
+    test_name = "_pior_caso"
     
-    print("iniciando os testes de performance...")
+    print("iniciando os testes do pior caso...")
     
-    results_optimized = append_results_to_file(casos, pruneOptimized)
+    results_optimized = append_results_to_file(casos["pior_caso"], pruneOptimized, test_name)
     
     print("testes da funcao otimizada finalizada")
     print("inicio do caso de teste default")
     
-    results_default = append_results_to_file(casos, prune)
+    results_default = append_results_to_file(casos["pior_caso"], prune, test_name)
     
     print("imprimindo resultados dos dois testes em um único arquivo....")
     
-    write_results_to_file([results_optimized, results_default], [pruneOptimized.__name__, prune.__name__])
+    write_results_to_file([results_optimized, results_default], [pruneOptimized.__name__ + test_name, prune.__name__ + test_name])
     
+    test_name = "_caso_medio"
+    print("iniciando os testes do caso medio...")
+    
+    results_optimized_medio = append_results_to_file(casos["caso_medio"], pruneOptimized, test_name)
+    
+    print("testes da funcao otimizada finalizada")
+    print("inicio do caso de teste default")
+    
+    results_default_medio = append_results_to_file(casos["caso_medio"], prune, test_name)
+    
+    print("imprimindo resultados dos dois testes em um único arquivo....")
+    
+    write_results_to_file([results_optimized_medio, results_default_medio], [pruneOptimized.__name__ + test_name, prune.__name__ + test_name])
+
     print("fim dos testes -> ja estao no diretorio results")
