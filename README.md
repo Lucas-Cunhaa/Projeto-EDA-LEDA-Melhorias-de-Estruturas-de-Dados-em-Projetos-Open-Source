@@ -146,6 +146,12 @@ Para rodar o script `plot.R`, use o seguinte comando:
 ```bash
 R < plot.R --vanilla ../../results/cadastra_filmes.txt
 ````
+
+## 👥 Equipe
+- **Henrique** - Classe *Filme*
+- **Caio & Letícia** - Classe *FilmNow*
+- **João & Lucas** - Testes de Experimentação
+
 ---
 
 # Projeto 1 - Henrique Sudoku (Henrique de Freitas e Sousa)
@@ -331,9 +337,3 @@ Os testes empíricos comprovaram **ganhos expressivos de desempenho**.
 Portanto, a otimização proposta é eficaz e torna o *Apriori Algorithm* mais eficiente e preparado para lidar com grandes volumes de dados.
 
 ---
-
-## 👥 Equipe
-- **Henrique** - Classe *Filme*
-- **Caio & Letícia** - Classe *FilmNow*
-- **João & Lucas** - Testes de Experimentação
-
