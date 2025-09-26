@@ -40,12 +40,12 @@ const getNPMConfigFromPackageJsonOptmized = (path) => {
 
     let obj = packages.config
     for (var i = 0, len = path.length; i < len; i++) {
-        if (!obj) 
-            return obj
+        if (!obj) break
         obj = obj[path[i]]
     }
-    cacheConfig.set(path, obj)
     
+    cacheConfig.set(path, obj)
+
     return obj
 }
 
