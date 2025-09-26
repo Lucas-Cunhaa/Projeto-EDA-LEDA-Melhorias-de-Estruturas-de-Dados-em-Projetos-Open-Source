@@ -1,5 +1,5 @@
 class LRUCacheConfig {
-    #DEFAULT_LIMIT = 10;
+    #DEFAULT_LIMIT = 100;
 
     constructor(limit = this.#DEFAULT_LIMIT) {
         this.cache = new Map()
@@ -17,8 +17,7 @@ class LRUCacheConfig {
     }
 
     set(key, value) {
-        if (this.cache.has(key)) this.cache.delete(key)
-        else if (this.cache.size >= this.limit) {
+        if (this.cache.size >= this.limit) {
             const oldestKey = this.cache.keys().next().value
             this.cache.delete(oldestKey)
         }
