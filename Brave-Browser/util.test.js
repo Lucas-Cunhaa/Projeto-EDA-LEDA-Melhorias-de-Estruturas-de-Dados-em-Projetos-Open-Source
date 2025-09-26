@@ -1,34 +1,37 @@
-const path = require('path')
 const fs = require('fs')
 
-jest.mock('fs') // mock do fs
+jest.mock('fs', () => ({
+  existsSync: jest.fn(),
+}));
+
+jest.mock('./package.json', () => mockPackageJson, { virtual: true });
+
+const mockPackageJson = {
+  name: 'test-app',
+  config: {
+    projects: {
+      'brave-core': {
+        dir: 'src/brave',
+        repository: {
+          url: 'https://github.com/brave/brave-core.git'
+        }
+      }
+    }
+  }
+};
 
 describe('Comparação entre funções util.js e utilOptmized.js', () => {
-  const fakePackagePath = path.join(__dirname, 'fake.package.json')
   let getNPMConfigFromPackageJson
   let getNPMConfigFromPackageJsonOptmized
 
+   
   beforeEach(() => {
-    jest.resetModules()
-    process.env['npm_package_json'] = fakePackagePath
+    process.env['npm_package_json'] = './package.json';
+    fs.existsSync.mockReturnValue(true);
 
-    fs.existsSync.mockReturnValue(true)
-
-    jest.doMock(fakePackagePath, () => ({
-      config: {
-        projects: {
-          'brave-core': {
-            dir: 'src/brave',
-            branch: 'master',
-          },
-        },
-      },
-    }), { virtual: true })
-
-    // importa os módulos só depois do mock
-    ;({ getNPMConfigFromPackageJson } = require('./util'))
-    ;({ getNPMConfigFromPackageJsonOptmized } = require('./utilOptmized'))
-  })
+    getNPMConfigFromPackageJson = require('./util').getNPMConfigFromPackageJson
+    getNPMConfigFromPackageJsonOptmized = require('./utilOptmized').getNPMConfigFromPackageJsonOptmized
+  });
 
   test('Ambas funções retornam o mesmo valor para caminho válido', () => {
     const pathArr = ['projects', 'brave-core', 'dir']

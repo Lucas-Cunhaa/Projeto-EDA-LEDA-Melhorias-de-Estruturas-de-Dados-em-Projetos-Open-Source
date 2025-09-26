@@ -25,6 +25,7 @@ const getNPMConfigFromEnv = (path) => {
 // Funcao a ser otimizada
 const getNPMConfigFromPackageJson = (path) => {
   let packages = { config: {} }
+  
   if (fs.existsSync(process.env['npm_package_json'])) {
     packages = require(process.env['npm_package_json'])
   }

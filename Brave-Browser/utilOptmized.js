@@ -2,12 +2,15 @@ const fs = require('fs')
 const path = require('path');
 // const Log = require('./logging')
 require("dotenv").config()
+const LRUCacheConfig = require('./LRUCacheConfig')
 // const { spawnSync } = require('child_process')
 
 // This is the valid way of retrieving configuration values for NPM <= 6, with
 // npm_package_config_* still working up to NPM 7, but no longer for NPM >= 8.
 // See https://github.com/npm/rfcs/blob/main/implemented/0021-reduce-lifecycle-script-environment.md
-let lastPath = null;
+
+
+const cacheConfig = new LRUCacheConfig()
 
 const getNPMConfigFromEnv = (path) => {
   const key = path.join('_')
@@ -28,7 +31,7 @@ const getNPMConfigFromEnv = (path) => {
 
 // Funcao a ser otimizada
 const getNPMConfigFromPackageJsonOptmized = (path) => {
-    if (process.env.PROJECT_PATH && JSON.stringify(lastPath) === JSON.stringify(path)) return process.env.PROJECT_PATH;
+    if (cacheConfig.hasKey(path)) return cacheConfig.get(path);
 
     let packages = { config: {} }
     if (fs.existsSync(process.env['npm_package_json'])) {
@@ -41,12 +44,9 @@ const getNPMConfigFromPackageJsonOptmized = (path) => {
             return obj
         obj = obj[path[i]]
     }
+    cacheConfig.set(path, obj)
     
-   lastPath = path
-
-   updateEnvPath(obj)
-    
-  return obj
+    return obj
 }
 
 const getNPMConfig = (path) => {
