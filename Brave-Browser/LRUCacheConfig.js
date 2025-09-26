@@ -1,5 +1,5 @@
 class LRUCacheConfig {
-    #DEFAULT_LIMIT = 100;
+    #DEFAULT_LIMIT = 100000;
 
     constructor(limit = this.#DEFAULT_LIMIT) {
         this.cache = new Map()

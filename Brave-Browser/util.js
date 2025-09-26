@@ -44,7 +44,6 @@ const getNPMConfig = (path) => {
   return getNPMConfigFromEnv(path) || getNPMConfigFromPackageJson(path)
 }
 
-
 const getProjectVersion = (projectName) => {
   return getNPMConfig(['projects', projectName, 'tag']) || getNPMConfig(['projects', projectName, 'branch'])
 }

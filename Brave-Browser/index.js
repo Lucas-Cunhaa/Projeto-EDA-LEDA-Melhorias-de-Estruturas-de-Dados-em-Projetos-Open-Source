@@ -30,37 +30,27 @@ function generatePath(size) {
     return result
 }
 
-function generateNestedObjectByPath(path) {
-    const obj = { config : {} }
-    let current = obj.config
-
-    for (let i = 0; i < path.length - 1; i++) {
-        const key = path[i];
-        current[key] = {};
-        current = current[key];
-    }
-    
-    current[path[path.length - 1]] = "end";
-
-    fs.writeFileSync("package.json", JSON.stringify(obj, null, 2), "utf-8")
-}
 
 function setupBenchmark (size) {
     const path = generatePath(size)
-    generateNestedObjectByPath(path)
 
-    benchmark(utilsOptmized.getNPMConfigFromPackageJsonOptmized, "utils-optmized", path)
+    benchmark(utils.getNPMConfigFromPackageJson, "utils-default", path)
+    //benchmark(utilsOptmized.getNPMConfigFromPackageJsonOptmized, "utils-optmized", path)
 }
 
 function benchmark(target, targetName, path) {
     const EXECUTION_TIME = 10000
     let time = 0
-    
-    for (let index = 0; index <= EXECUTION_TIME; index++) {
-        const start = performance.now();
+
+    for (let index = 0; index < 1000; index++) {
         target(path)
-        const end = performance.now();
-        time += (end - start) / EXECUTION_TIME
+    }
+
+    for (let index = 0; index <= EXECUTION_TIME; index++) {
+        const start = performance.now()
+        target(path)
+        const end = performance.now()
+        time += Math.round((end - start) * 1000000  / EXECUTION_TIME)
     }
 
     console.log(`${targetName} ${time} ${path.length-1}`) 
