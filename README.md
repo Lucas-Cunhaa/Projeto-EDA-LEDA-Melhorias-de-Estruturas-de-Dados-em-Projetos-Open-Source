@@ -1,10 +1,117 @@
-# Projeto de Otimização de Performance - EDA/LEDA
+# Projeto de Otimização de Performance - EDA/LEDA - LAB
 ## 🎯 Propósito do Projeto
 Este projeto foi desenvolvido como parte da disciplina de Estrutura de Dados com o objetivo principal de demonstrar e implementar otimizações de algoritmos, reduzindo drasticamente o tempo de execução de operações críticas. Através de otimizações, transformamos algoritmos lentos e ineficientes em soluções rápidas e escaláveis, assim, como na alteração de estrutura de dados, buscando uma implementação mais adequada para o caso de uso.
 ## 🔍 O Que Foi Otimizado:
 
 #### *Antes: Algoritmos lentos com complexidade O(n) - o tempo de execução crescia linearmente com o tamanho dos dados*
 #### *Depois: Algoritmos eficientes com complexidade O(1) - tempo de execução constante, independente do tamanho dos dados*
+
+
+## 📁 Estrutura das pastas
+- **data/**  → contém os arquivos de entrada (ex: `tamanho.txt`)  
+- **results/** → armazena os resultados em `.txt` após a execução dos testes  
+- **graphs/** → contém os gráficos gerados no R em formato `.pdf`  
+- **ufcg_lp2_implementation/** → implementação original (com arrays)  
+- **ufcg_lp2_optimized_implementation/** → implementação otimizada (com HashMaps)  
+
+---
+
+## 📌 Fase 1 — Modificações das Estruturas de Dados
+
+### Alterações na classe **Filme** — *Henrique*
+  - Substituição do **array** por um **HashMap** para armazenar os locais onde o filme pode ser assistido.  
+  - **Chave (String):** nome do local.  
+  - **Valor (Integer):** ordem em que o local foi adicionado, de acordo com um contador.  
+- Benefícios:
+  - Evita duplicatas.
+  - Busca otimizada por um local específico (`O(1)` com `containsKey`).
+  - Simplicidade na verificação de capacidade e contagem de locais.
+
+#### Principais mudanças:
+- **`quantLocais()`**  
+  Antes: percorria todo o array (`O(n)`), contando os elementos não nulos.  
+  Agora: retorna diretamente o contador (`O(1)`).
+
+- **`indiceLocal()`**  
+  Antes: busca linear no array.  
+  Agora: consulta direta no HashMap (`O(1)`).
+
+- **`indicePermiteAdicionar()`**  
+  Antes: percorria o array em busca da primeira posição vazia no array.  
+  Agora: simples comparação entre contador e limite máximo.
+
+- **`removerLocal()` e `adicionarLocalAssistir()`**  
+  Antes: buscas preliminares no array.  
+  Agora: remoção e inserção diretas no HashMap.
+
+- **`getLocalAssistir()`**  
+  Antes: retornava posições nulas.  
+  Agora: retorna apenas os valores válidos via `keySet()`.
+
+➡️ Todas as operações críticas passaram de **`O(n)` para `O(1)`**.
+
+---
+
+### Alterações na classe **FilmNow** — *Caio e Letícia*
+- Substituição de dois **arrays** por **HashMaps**:
+  - Um armazena todos os filmes do sistema.
+  - Outro armazena os filmes da “hotlist” (favoritos).
+- **Chave (String):** nome do filme (identificador único).  
+- **Valor (Filme):** Filme armazenado.
+#### Observação: 
+- Para fins de otimização foi necessário modificar a assinatura de alguns métodos, substituindo a posição pelo nome do filme como parâmetro.
+
+#### Benefícios:
+- **`existeFilme(String nome)`**  
+  Antes: busca linear (`O(n)`).  
+  Agora: busca constante (`O(1)`) via `containsKey()`.
+
+- Impacto positivo em todos os métodos dependentes que precisavam checar se o filme existia antes de realizar alguma ação:
+  - `getFilme(String nome)`
+  - `detalharFilme(String nome)`
+  - `cadastraFilme(String nome, int ano, String local)`
+  - `adicionarHot(String nome)`
+  - `removerHot(String nome)`
+  - `removerHot(FilmeOtimizado filmeRemover)`
+  - `removerFilme(String nome)`
+
+➡️ Assim como em **Filme**, todas as operações críticas passaram de **`O(n)` para `O(1)`**.
+
+---
+
+
+## 📌 Fase 2 — Experimentação (Testes de Desempenho)
+
+Autores: *João e Lucas*  
+
+Para validar as melhorias, realizamos testes práticos:
+
+1. Foi criado um arquivo `tamanhos.txt` contendo valores de 1000 até 500.000 (em intervalos de 1000).  
+2. Para cada valor:
+   - Foi criada uma instância de **FilmNow** com esse tamanho.
+   - Foram executados os métodos `cadastraFilme` e `adicionarHot` nas versões **antes** e **depois** da otimização.
+3. Cada cenário foi repetido **~100.000 vezes** para garantir confiabilidade dos tempos médios, considerando efeitos como **garbage collector** e **sobrecarga inicial da JVM**.
+4. Os resultados foram registradis em arquivos `.txt` no diretório `data`:
+   - `Method` → Nome do método testado  
+   - `Time` → Tempo de execução  
+   - `Sample` → Tamanho da entrada  
+
+### 📊 Análise dos resultados
+- Utilizou-se **R + ggplot2** para gerar gráficos comparativos armazenados em `graphs/`.  
+- Resultados confirmaram a análise teórica:
+  - **Arrays:** desempenho linear (`O(n)`).  
+  - **HashMaps:** desempenho constante (`O(1)`).  
+
+---
+
+## ✅ Conclusão
+- As modificações confirmaram ganhos expressivos de desempenho.  
+- Todas as operações críticas migraram de **tempo linear (`O(n)`)** para **tempo constante (`O(1)`)**.  
+- A otimização se mostrou especialmente vantajosa em cenários de **grande volume de dados**, sem comprometer a **funcionalidade original** nem a **interface pública** das classes.
+
+---
+
+
 
 ## 🧪 COMO RODAR O TESTE DE EXECUÇÃO
 
@@ -15,40 +122,32 @@ Este projeto foi desenvolvido como parte da disciplina de Estrutura de Dados com
 cd LAB-3-LP2
 
 # Comando para compilar o projeto
-javac -d bin .\ufcg.lp2.default.implementation\src\*.java
+javac .\ufcg_lp2_implementation\src\MainDefault.java
 
-# Comando para executar o programa principal
-java -cp bin ufcg.lp2.default.implementation.src.MainDefault
+# Comando para executar o programa principal, inserindo dados e escrevendo o processamento no arquivo .txt 
+data/tamanho.txt < java ufcg_lp2_implementation\src\MainDefault  > results/cadastra_filmes_default.txt
+
 ````
 
-## 📊 COMO GERAR OS GRÁFICOS
+## 📊 COMO GERAR OS GRÁFICOS COM R
 
 ### Pré-requisitos:
 ```bash
-# Instale as dependências Python necessárias
-pip install matplotlib
-
-# rode o main.py que esta na raiz do reposítorio
-python main.py
+- Instale **R**
+- Instalar o pacote **ggplot2**
+comando apra isntalar o ggplot2: install.packages("ggplot2")
 ````
 
-### Entendendo como gerar o gráfico dos dados no arquivos .txt:
+#### Executar o script em R
 
-````bash
-# Exemplo de opções:
+Os gráficos são gerados a partir dos resultados salvos em `results/`.  
+Para rodar o script `plot.R`, use o seguinte comando:
 
-(1) resultCadastraFilmesBeforeOptimization.txt -> teste do méthodo Cadastra Filme antes da otimização {O(n)}
-(2) resultCadastraFilmesAfterOptimization.txt -> teste do méthodo Cadastra Filme depois da otimização {O(1)}
-.
-.
-.
-# basta escolher uma opção e ele gerará o gráfico do número de caso de entrada de dados e seus tempos de execução
+```bash
+R < plot.R --vanilla ../../results/cadastra_filmes.txt
 ````
-## Conclusão
-As modificações realizadas comprovaram a eficácia da substituição de arrays por HashMaps no projeto analisado. Tanto a análise assintótica quanto os testes práticos comprovaram ganhos significativos de desempenho nas operações anteriormente de complexidade O(n) em operações de tempo constante O(1), sem comprometer a funcionalidade original do sistema.
-	Esses resultados destacam a importância da escolha adequada de estruturas de dados em projetos de software, evidenciando que decisões arquiteturais bem fundamentadas podem impactar diretamente a eficiência e a escalabilidade de sistemas computacionais.
-	A partir de agora, cada integrante vai escolher o seu próprio projeto open source e realizar as mudanças necessárias.
-  
+---
+
 # Projeto 1 - Henrique Sudoku (Henrique de Freitas e Sousa)
 ## 🎯 Propósito do Projeto
 Este projeto foi desenvolvido como parte da disciplina de Estrutura de Dados com o objetivo principal de demonstrar e implementar otimizações de algoritmos em projetos Open Source. O projeto escolhido dessa vez é o SudokuGUI-Solver - https://github.com/techwithtim/Sudoku-GUI-Solver - que consiste em um resolvedor de Sudoku, implementando o algoritmo de backtracking, com interface gráfica desenvolvido em Python, utilizando a biblioteca Pygame.
@@ -135,3 +234,106 @@ Com os arquivos no lugar e as bibliotecas instaladas, o processo é direto e sim
 
 ## Conclusão 
 A otimização com sets demonstrou ser decisiva para o desempenho do algoritmo de Sudoku. A mudança de validações O(n) para O(1) transformou operações críticas, resultando em ganhos de performance que se multiplicam exponencialmente durante o backtracking.
+
+---
+
+# Projeto 3 - Python-Open-Source-Algorithms (João Ventura Crispim Neto)
+## Apriori Algorithm 
+[TheAlgoritms/Python/machine_learning/apriori_algorithm.py](https://github.com/TheAlgorithms/Python/blob/master/machine_learning/apriori_algorithm.py)
+
+Este projeto tem como objetivo otimizar a implementação do **Apriori Algorithm** presente no repositório [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python). O algoritmo é uma técnica clássica de mineração de regras de associação, amplamente utilizada em análise de mercado (*market basket analysis*), cujo propósito é identificar padrões de coocorrência de itens em transações, como por exemplo:
+
+> “Clientes que compram A e B também tendem a comprar C”.
+
+---
+
+## 📌 Deficiência da Implementação Padrão
+
+Na versão original, a função **`prune`** apresentava forte ineficiência devido ao uso recorrente das operações:
+
+* `in` em listas → O(n)
+* `count` em listas → O(n)
+
+Essas operações eram executadas repetidamente para cada item de cada candidato, resultando em uma complexidade:
+
+```
+O(m · k₂ · n · k₁)
+```
+
+O que torna a execução inviável em cenários com grandes volumes de dados.
+
+---
+
+## 🔑 Significado das Variáveis
+
+* **n** → número de elementos no *itemset*.
+* **k₁** → tamanho médio das sublistas dentro do *itemset*.
+* **m** → número de candidatos gerados pelo algoritmo.
+* **k₂** → tamanho médio das sublistas dentro de cada candidato.
+
+---
+
+## 🚀 Solução Proposta
+
+A otimização consistiu em **pré-processar o itemset** utilizando a estrutura `Counter`, com **tuplas como chaves** (estruturas imutáveis em Python).
+
+* Verificação de presença → O(1) amortizado
+* Contagem de elementos → O(1) amortizado
+
+### Complexidade Final
+
+* Construção do `Counter`: `O(n · k₁)`
+* Processamento dos candidatos: `O(m · k₂²)`
+* Uso de memória auxiliar: `O(n · k₁)`
+
+➡️ **Complexidade total:**
+
+```
+O(n · k₁ + m · k₂²)
+```
+
+---
+
+## 🧪 Como Rodar os Casos de Teste e Gerar os Gráficos
+
+1. Na raiz da pasta **/Python-Open-Source-Algorithms**, execute o script:
+
+   ```bash
+   python main.py
+   ```
+
+   * O script gera automaticamente casos de teste médios e piores casos.
+   * O uso de **Threads** permite executar as funções em paralelo, acelerando a coleta dos resultados.
+   * Os resultados são salvos em arquivos `.txt` na pasta **/results**.
+
+2. Para gerar os gráficos de análise, vá até a pasta **/scripts** que está na raiz do repositório e rode o comando:
+
+   ```bash
+   - Instale **R**
+   - Instalar o pacote **ggplot2**
+   - comando apra isntalar o ggplot2: install.packages("ggplot2")
+   ```
+
+   ```bash
+   R < plot.R --vanilla ../Python-Open-Source-Algorithms/results/pruneOptimized_pior_caso_prune_pior_caso_algoritm_results.txt
+   ````
+
+   Issso gerara os gráficos na própria pasta **/scripts** em .pdf.
+---
+
+## ✅ Conclusão
+
+Os testes empíricos comprovaram **ganhos expressivos de desempenho**.
+
+* A versão otimizada reduziu significativamente o impacto do crescimento do *itemset*, tornando o algoritmo mais escalável.
+* Embora tenha introduzido o uso de memória auxiliar e um termo quadrático em `k₂`, o trade-off foi vantajoso, já que o custo original dependia fortemente de `n · k₁`.
+
+Portanto, a otimização proposta é eficaz e torna o *Apriori Algorithm* mais eficiente e preparado para lidar com grandes volumes de dados.
+
+---
+
+## 👥 Equipe
+- **Henrique** - Classe *Filme*
+- **Caio & Letícia** - Classe *FilmNow*
+- **João & Lucas** - Testes de Experimentação
+
