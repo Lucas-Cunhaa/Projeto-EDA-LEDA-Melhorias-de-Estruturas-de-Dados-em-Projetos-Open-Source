@@ -1,7 +1,10 @@
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class benchmark {
+
+    static FileWriter csvWriter;
     
     static class MoveItem {
         String nr;
@@ -17,10 +20,16 @@ public class benchmark {
         }   
     }
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws Exception {
+            csvWriter = new FileWriter("benchmarkresults.csv");
+            csvWriter.append("Run,N,Structure,MemoryMB,TimeMS\n");
+
             int N = 1_000_000;
             benchmarkMemory(N);
             benchmarkRuntime(N, 5);
+
+            csvWriter.flush();
+            csvWriter.close();
         }
     
     
@@ -29,7 +38,7 @@ public class benchmark {
             return runtime.totalMemory() - runtime.freeMemory();
         }
     
-        public static void benchmarkMemory(int N) {
+        public static void benchmarkMemory(int N) throws Exception {
             //HashMap insertion
             ArrayList<HashMap<String, String>> mapMoves = new ArrayList<>();
             for(int i = 0; i < N; i++) {
@@ -62,11 +71,11 @@ public class benchmark {
                 e.printStackTrace();
             }
             long usedClass = getUsedMemory();
-            System.out.println("Memória HashMap: " + usedMap / 1e6 + " MB");
-            System.out.println("Memória Classe: " + usedClass / 1e6 + " MB");
+            csvWriter.append("0," + N + ",HashMap," + (usedMap / 1e6) + ",\n");
+            csvWriter.append("0," + N + ",Classe," + (usedClass / 1e6) + ",\n");
         }
 
-        public static void benchmarkRuntime(int N, int runs) {
+        public static void benchmarkRuntime(int N, int runs) throws Exception {
             for(int i = 0; i <= runs; i++) {
                 //Hashmap
                 long startMap = System.nanoTime();
@@ -90,8 +99,8 @@ public class benchmark {
                 }
                 long endClass = System.nanoTime();
 
-                System.out.printf("Run %d | Tempo HashMap: %.2f ms | Tempo Classe: %.2f ms\n",
-                    i, (endMap - startMap) / 1e6, (endClass - startClass) / 1e6);
+                csvWriter.append(i + "," + N + ",HashMap,," + ((endMap-startMap)/1e6) + "\n");
+                csvWriter.append(i + "," + N + ",Classe,," + ((endClass-startClass)/1e6) + "\n");
             }
         }
 }
