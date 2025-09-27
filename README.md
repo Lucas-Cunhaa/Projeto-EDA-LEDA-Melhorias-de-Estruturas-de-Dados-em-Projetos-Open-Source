@@ -336,7 +336,7 @@ Os testes empíricos comprovaram **ganhos expressivos de desempenho**.
 
 Portanto, a otimização proposta é eficaz e torna o *Apriori Algorithm* mais eficiente e preparado para lidar com grandes volumes de dados.
 
-# Caio - Jogo Android de Xadrez
+# Projeto 4 Caio - Jogo Android de Xadrez
 ## Descrição do projeto
 Este projeto faz parte da disciplina de Estruturas de Dados, onde cada integrante selecionou um projeto open source com o objetivo principal de demonstrar e implementar otimizações de algoritmos.
 Minha contribuição focou no projeto Android Chess (https://github.com/jcarolus/android-chess), um jogo de xadrez para Android, buscando otimizar a forma como os movimentos do jogador eram armazenados e exibidos. Onde inclusive, tive meu PR aceito.
