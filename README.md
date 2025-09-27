@@ -497,6 +497,84 @@ Com a finalização dos passos anteriores, pude substituir a estrutura ArrayList
 
 Você pode encontrar essas alterações acessando o folder: android-chess-otimizado/app/src/main/java/jwtc/android/chess/play/. Lá criei a classe MoveItem.java e o adapter MoveItemAdapter.java. Também alterei a estrutura em si no PGNDialog.java.
 
-## Melhorias no programa
+### Melhorias no programa
 Além de ter tido meu PR aceito pelo autor do programa, gerei alguns gráficos apartir de um benchmark que construi para comprovar a melhoria no uso de memória e no tempo de execução do programa. Você pode verifica-los no arquivo Rplots.pdf, bem como, gerar novamente usando o benchmark e o script em R (plot_benchmark.R) que criei. 
 ---
+
+# Projeto 5 - Brave Browser (Lucas Cunha Galvão Florindo)  
+## Otimização da Função getNPMConfigFromPackageJson  
+[brave/brave-browser](https://github.com/brave/brave-browser)  
+
+Este projeto teve como objetivo propor uma otimização em um trecho do código do *Brave Browser, um navegador open-source baseado no Google Chrome e voltado para **privacidade e segurança*.  
+O foco foi a função *getNPMConfigFromPackageJson*, presente em um módulo auxiliar (utils), responsável por acessar dinamicamente configurações aninhadas do arquivo package.json.  
+
+---
+
+## 📌 Deficiência da Implementação Padrão  
+
+Na versão original, a função percorria sequencialmente o objeto config, utilizando cada chave do array path até chegar ao valor desejado.  
+
+- *Complexidade:* O(n), onde n é o tamanho do array path.  
+- *Problema:* acessos repetitivos com caminhos extensos aumentavam proporcionalmente o tempo de execução.  
+- *Impacto:* em cenários com muitas consultas a package.json, a operação linear comprometia o desempenho.  
+
+---
+
+## 🔑 Significado das Variáveis  
+
+* *n* → tamanho do array path (número de chaves a percorrer).  
+
+---
+
+## 🚀 Solução Proposta  
+
+A otimização consistiu na *implementação de um cache LRU (Least Recently Used)*, capaz de armazenar os resultados das consultas mais frequentes.  
+
+- *Primeira busca:* custo linear O(n) (função executa normalmente).  
+- *Buscas subsequentes:* custo constante O(1) (resultado recuperado do cache).  
+- *Política LRU:* garante que apenas os paths mais utilizados permanecem armazenados, evitando estouro de memória.  
+
+### Estrutura Utilizada  
+
+- Implementação feita em LRUCacheConfig.js.  
+- Estrutura baseada em *Map* (que combina HashMap e LinkedList), possibilitando:  
+  * Inserções e buscas em O(1).  
+  * Atualização da ordem de uso para respeitar a política LRU. 
+
+---
+
+## ⚙️ Modificações na Função  
+
+1. Instanciado o cache fora da função.  
+2. Verificado se o path já está no cache → retorna imediatamente em O(1).  
+3. Caso contrário, executa a busca linear e insere o resultado no cache.  
+4. Testes unitários com *Jest* validaram a correção e estabilidade da solução.  
+
+---
+
+## 📊 Resultados Obtidos  
+
+Foi criado um benchmark (index.js) para comparar a versão original e a otimizada:  
+
+- *Execução prévia (“aquecimento”)*: 100 repetições para estabilizar o Node.js.  
+- *Benchmark real:* 10.000 execuções para cada path de tamanho n.  
+- *Resultados analisados com ggplot2 no R.*  
+
+### Conclusões do Gráfico:  
+- *Linha verde (otimizada):* tempo de execução quase sempre constante (O(1)).  
+- *Linha vermelha (original):* tempo de execução linear (O(n)), degradando com paths maiores.  
+- *Linha azul:* picos iniciais correspondem a acessos antes do cache estar preenchido.  
+
+---
+
+## ✅ Conclusão  
+
+A introdução da política de cache LRU tornou a função *muito mais eficiente*, reduzindo de O(n) para O(1) a maioria das consultas.  
+Essa melhoria trouxe:  
+
+- *Maior escalabilidade* para o código.  
+- *Uso de memória controlado*, graças à política LRU.  
+- *Resultados empíricos comprovando ganhos expressivos de desempenho.*  
+
+Assim, a otimização se mostrou eficaz, eliminando gargalos da implementação original e deixando o Brave Browser mais preparado para cenários de uso intensivo.  
+
