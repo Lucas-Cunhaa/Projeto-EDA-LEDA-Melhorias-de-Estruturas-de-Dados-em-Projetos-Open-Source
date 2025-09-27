@@ -1,0 +1,18 @@
+Relatório de Performance - Comparação de Códigos de Sudoku
+----------------------------------------------------------
+
+Análise Geral (Função solve):
+- Tempo médio da versão original: 0.000005 s
+- Tempo médio da versão otimizada: 0.000002 s
+- A versão otimizada é, em média, 2.27 vezes mais rápida.
+
+Análise da Função valid():
+- Tempo médio da versão original: 0.000095854 s
+- Tempo médio da versão otimizada: 0.000028472 s
+- A versão otimizada é, em média, 3.37 vezes mais rápida.
+
+Análise da Função place():
+- Tempo médio da versão original: 0.002731507 s
+- Tempo médio da versão otimizada: 0.001768776 s
+- A versão otimizada é, em média, 1.54 vezes mais rápida.
+
