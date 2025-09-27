@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            storeFile file('../../android-keystore')
+        }
+    }
+    compileSdkVersion 36
+    buildToolsVersion '36'
+    defaultConfig {
+        applicationId "jwtc.android.chess"
+        minSdkVersion 21
+        targetSdkVersion 36
+        resourceConfigurations += ['en', 'zh', 'it', 'pt', 'es', 'ru', 'de', 'fr', 'tr', 'ro']
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.config
+        }
+    }
+    flavorDimensions "deps"
+    productFlavors {
+        playStore {
+            dimension "deps"
+        }
+        foss {
+            dimension "deps"
+        }
+    }
+
+    // not yet forcing; @TODO
+    // ndkVersion "29.0.14033849"
+
+    externalNativeBuild {
+        ndkBuild {
+            path file('../native/project/jni/Android.mk')
+        }
+    }
+    namespace 'jwtc.android.chess'
+//    lint {
+//        disable 'MissingTranslation'
+//    }
+}
+
+dependencies {
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.mediarouter:mediarouter:1.8.1'
+    playStoreImplementation 'com.google.android.gms:play-services-cast:22.1.0'
+}
