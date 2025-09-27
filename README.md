@@ -243,6 +243,146 @@ A otimização com sets demonstrou ser decisiva para o desempenho do algoritmo d
 
 ---
 
+# Projeto 2 - Otimização da Forca  
+**Autora:** Letícia Luna Dias Barbosa  
+
+---
+
+## 🎯 Propósito do Projeto
+
+Este projeto foi desenvolvido como parte da disciplina de **Estrutura de Dados**, com o objetivo de demonstrar a importância da escolha correta de **estruturas de dados** e a influência que elas exercem sobre a eficiência de um programa.  
+
+O projeto escolhido foi o **Hangman (jogo da forca)** do repositório open source de [techwithtim](https://github.com/techwithtim/Hangman), implementado em **Python** com interface gráfica utilizando a biblioteca **Pygame**.  
+
+---
+
+## 🔍 O Algoritmo do Jogo da Forca
+
+### Fundamentos do Jogo
+- A forca é um jogo tradicional cujo objetivo é descobrir uma palavra secreta através da seleção progressiva de letras.  
+- A cada letra correta, a posição correspondente na palavra é revelada.  
+- A cada letra incorreta, uma parte do boneco é desenhada.  
+- O jogador perde caso o desenho seja concluído antes de descobrir a palavra.  
+
+### Na implementação analisada:
+- `buttons`: lista que contém todas as letras do alfabeto.  
+- `guessed`: lista que armazena as letras já selecionadas.  
+- `word`: string que contém a palavra secreta.  
+
+---
+
+## ⚡ Problema Identificado na Implementação Original
+
+### Ineficiências Estruturais
+1. **Uso de lista em `guessed`:**
+   - Complexidade **O(n·k)** na função `spacedOut`, que verifica letra a letra da palavra e percorre todas as letras já escolhidas.  
+     - `n`: tamanho da palavra secreta  
+     - `k`: número de letras já adivinhadas  
+2. **Ausência de verificação de duplicatas:**
+   - A mesma letra podia ser adicionada várias vezes em `guessed`.  
+   - Uma letra incorreta podia ser clicada repetidamente, penalizando o jogador várias vezes até a derrota.  
+
+### Consequência do Problema
+- **Menor desempenho** da função `spacedOut`, invocada a cada atualização de estado.  
+- **Experiência de jogo prejudicada**, já que erros repetidos podiam encerrar a partida injustamente.  
+
+---
+
+## 🚀 Solução Implementada
+
+### Substituição por Conjunto (`set`)
+A lista `guessed` foi substituída por um `set()`, estrutura que não armazena duplicatas e realiza buscas em tempo **O(1)**:  
+
+```python
+guessed = set()
+
+## Adaptação da Lógica
+
+Inclusão de uma checagem prévia para evitar repetição de letras:
+
+```python
+if letter != None and chr(letter) not in guessed:
+    guessed.add(chr(letter))
+    buttons[letter - 65][4] = False
+    if hang(chr(letter)):
+        if limbs != 5:
+            limbs += 1
+        else:
+            end()
+
+## Reimplementação da função spacedOut
+
+A função passou de O(n·k) para O(n):
+
+```python
+def spacedOut(word, guessed=set()):
+    spacedWord = ''
+    for ch in word:
+        if ch == ' ':
+            spacedWord += ' '
+        elif ch.upper() in guessed:
+            spacedWord += ch.upper() + ' '
+        else:
+            spacedWord += '_ '
+    return spacedWord
+
+## Benefícios Obtidos
+
+- **Eficiência**: operações de busca em O(1) ao invés de O(n).  
+- **Robustez**: eliminação de duplicatas automaticamente pelo set.  
+- **Jogabilidade justa**: correção do bug que penalizava o jogador ao repetir letras erradas.  
+
+## 📊 Estrutura do Projeto
+
+Certifique-se de que os seguintes arquivos estão na mesma pasta (`/Forca-Otimizada`):
+
+- `hangman_original.py` → versão original do jogo.  
+- `hangman_otimizado.py` → versão com otimizações (uso de set e checagens).  
+- `benchmark.py` → script que executa os testes de benchmark, compara o tempo de ambas as versões e gera os arquivos de saída.  
+- `plot.R` → script em R que gera os gráficos a partir dos resultados do benchmark.  
+
+## 📦 Bibliotecas Necessárias
+
+**Python**  
+```bash
+pip install pygame
+install.packages("ggplot2")
+
+
+🧪 Como Rodar os Testes e Gerar Gráficos
+
+1. **Abra o Terminal ou Prompt de Comando**  
+
+   Navegue até a pasta onde você salvou os arquivos:
+
+   ```bash
+   cd [caminho_da_sua_pasta]
+
+2. **Execute o Benchmark**
+
+O script irá executar a função `spacedOut` várias vezes e salvar os resultados:
+
+```bash
+python benchmark.py
+
+Saída: um arquivo .txt contendo os tempos de execução.
+
+3. **Gere os Gráficos no R**
+Navegue até a pasta results (onde o arquivo de saída do benchmark está localizado) e execute:
+ ```bash
+   cd results
+   Rscript ..\script\plot.R
+   
+## ✅ Conclusão
+A substituição de uma lista por um set transformou a eficiência do projeto, reduzindo a complexidade de O(n·k) para O(n) e corrigindo falhas críticas de jogabilidade.
+
+Os resultados comprovam que a escolha correta de estruturas de dados pode gerar melhorias significativas não apenas no desempenho computacional, mas também na experiência do usuário, além de aumentar a confiabilidade e a robustez da aplicação.
+
+--- 
+
+
+
+
 # Projeto 3 - Python-Open-Source-Algorithms (João Ventura Crispim Neto)
 ## Apriori Algorithm 
 [TheAlgoritms/Python/machine_learning/apriori_algorithm.py](https://github.com/TheAlgorithms/Python/blob/master/machine_learning/apriori_algorithm.py)
